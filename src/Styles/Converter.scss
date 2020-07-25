@@ -1,0 +1,17 @@
+.Converter {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background:lightcoral;
+    width: 400px;
+    .selectCurrency {
+        display: flex;
+    }
+    .singleCurrency {
+        .selector {
+            .selectCurrencyBox {
+                width: 100px;
+            }
+        }
+    }
+}

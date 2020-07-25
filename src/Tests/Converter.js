@@ -1,15 +1,15 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { App } from './../Components/App';
+import { Converter } from './../Components/Converter';
 
-describe('App component', () => {
+describe('Converter component', () => {
 
   test("rendered correctly", () => {
 
-    const { container } = render(<App />);
+    const { container } = render(<Converter />);
 
     expect(container).toBeTruthy()
 
   })
-  
+
 });

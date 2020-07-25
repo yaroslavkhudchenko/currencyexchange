@@ -1,15 +1,15 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { App } from './../Components/App';
+import { Trends } from './../Components/Trends';
 
-describe('App component', () => {
+describe('Trends component', () => {
 
   test("rendered correctly", () => {
 
-    const { container } = render(<App />);
+    const { container } = render(<Trends />);
 
     expect(container).toBeTruthy()
 
   })
-  
+
 });

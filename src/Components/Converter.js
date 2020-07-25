@@ -25,15 +25,36 @@ export const Converter = () => {
 			})
 			.catch(err => console.log(`error while loading data - ${err}`))
 
-	},[])
+	},[]);
+
+
+    const refreshCurrencies = (e, what) =>	{
+		
+		what === 'target' ?
+			setSelectedTarget(e.target.value) :
+				axios.get(`https://api.exchangeratesapi.io/latest?base=${e.target.value}`)
+					.then((data) => {
+						console.log('good refresh currencies');
+						console.log(data.data.rates)
+						setListOfCurrencies(Object.entries(data.data.rates).map(one => one = { cur:one[0], value:one[1]}));
+						setSelectedBase(data.data.base)
+
+					})
+					.catch(err => console.log(`error during refreshing - ${err}`))
+	}
+
 
     return (
         <div className='Converter'>
             <div className='selectCurrency'>
                 <div className='singleCurrency'>
 					<div className='selector'>
-						<select value={selectedBase}>
-							
+						<select value={selectedBase} onChange={(e)=> refreshCurrencies(e, 'base')}>
+                        {listOfCurrencies.map((one,index)=>
+
+                            <option defaultValue={one.cur} key={one.value+index}>{one.cur}</option>
+
+                        )}
 						</select>
 					</div>
 					<div className='valueInput'>
@@ -45,8 +66,12 @@ export const Converter = () => {
 				</div>
 				<div className='singleCurrency'>
 					<div className='selector'>
-						<select value={selectedTarget}>
-						
+						<select value={selectedTarget} onChange={(e)=> refreshCurrencies(e, 'target')}>
+						{listOfCurrencies.map((one,index)=>
+
+                            <option defaultValue={one.cur} key={one.value+index}>{one.cur}</option>
+
+                        )}
 						</select>
 					</div>
 					<div className='valueInput'>

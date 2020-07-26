@@ -5,10 +5,6 @@ import axios from 'axios';
 export const Converter = () => {
 
     // selected base and target currencies for the selectors
-    //let [selectedBase, setSelectedBase] = useState({cur:'SEK', value:1});
-    //let [selectedTarget, setSelectedTarget] = useState({cur: 'GBP', value:0});
-
-
 	let [selected, setSelected] = useState({
 		base : {cur:'SEK', value:1},
 		target : {cur: 'GBP', value:0, pointer:0}
@@ -47,8 +43,6 @@ export const Converter = () => {
 			.catch(err => console.log(`error while loading data - ${err}`))
 
 	},[]);
-
-
 
     const refreshCurrencies = (e, what) =>	{
         e.persist();
@@ -89,8 +83,6 @@ export const Converter = () => {
 		console.log('input')
 		console.log(e.target.value)
 		
-
-		
 		// check which of two inputs changed
 		what === 'target'? 
 
@@ -115,9 +107,31 @@ export const Converter = () => {
 					value: e.target.value * selected.target.pointer
 				}
 			})
-		
     }
+	const mixCurrencies = () => {
+		let base = selected.base;
+		let target = selected.target;
+		axios.get(`https://api.exchangeratesapi.io/latest?base=${target.cur}`)
+			.then(data => {
+				console.log('data mix success');
+				console.log(data)
 
+				let correctData = Object.entries(data.data.rates).map(one => one = { cur:one[0], value:one[1]})
+
+				setSelected({
+					base: target,
+					target : {
+						cur:base.cur,
+						value:base.value,
+						pointer: correctData.filter(one=>one.cur === selected.base.cur)[0].value
+					}
+
+				})
+				setListOfCurrencies(correctData);
+
+			})
+		
+	}
 
     useEffect(()=>{
         console.log('selectedTarget')
@@ -147,11 +161,11 @@ export const Converter = () => {
 							type='number' 
 							onChange={(e) => inputChange(e, 'base')}
 							min="0"
-							value={(selected.base.value*1).toFixed(5)} 
+							value={selected.base.value*1} 
 						/>
 					</div>
 				</div>
-                <div className='mixArrows'>
+                <div className='mixArrows' onClick={mixCurrencies}>
 					mix
 				</div>
 				<div className='singleCurrency'>
@@ -169,7 +183,7 @@ export const Converter = () => {
 							type='number' 
 							onChange={(e) => inputChange(e, 'target')}
 							min="0"
-							value={(selected.target.value*1).toFixed(5)}
+							value={selected.target.value}
 						/>
 					</div>
 				</div>
@@ -181,7 +195,6 @@ export const Converter = () => {
 				<div className='resultBody'>
 					<div>Selling 1.00000 {selected.base.cur} gives you {((1 * selected.target.pointer)*1).toFixed(5)} {selected.target.cur}</div>
 					<div>Buying 1.00000 {selected.target.cur} costs you {((1 / selected.target.pointer)*1).toFixed(5)} {selected.base.cur}</div>
-
 				</div>
             </div>
 

@@ -1,3 +1,16 @@
+// common style for input and select
+@mixin selectInput{
+    padding: 5px;
+    border: none;
+    font-size: 20px;
+    width: 250px;
+    box-sizing: border-box;
+    &:focus {
+        outline: none;
+    }
+}
+
+
 .Converter {
     display: flex;
     align-items: center;
@@ -6,12 +19,35 @@
     width: 400px;
     .selectCurrency {
         display: flex;
-    }
-    .singleCurrency {
-        .selector {
-            .selectCurrencyBox {
-                width: 100px;
+        .singleCurrency {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 75px;
+            .selector {
+                select {
+                    @include selectInput;
+                }
+                
+            }
+            .valueInput {
+                input {
+                    @include selectInput;
+                }
+               
+                /* hide arrows */
+                /* Chrome, Safari, Edge, Opera */
+                input::-webkit-outer-spin-button,
+                input::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+                }
+
+                /* Firefox */
+                input[type=number] {
+                -moz-appearance: textfield;
+                }
             }
         }
-    }
+     }
 }

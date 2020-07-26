@@ -6,40 +6,43 @@ import axios from 'axios';
 
 export const Trends = () => {
   
-  const [chartOptions, setChartOptions] = useState({
-    title: {
-      text: 'My stock chart'
-    },
-    xAxis: {
-      min: Date.UTC(2015, 2, 26),
-      max: new Date().getTime()
-  },
+  const [options, setOptions] = useState({})
 
-    series: [{
-      data: [1, 2, 3]
-    }]
-  })
-
+  const [currenciesForGraph, setCurrenciesForGraph] = useState(['GBP','USD','SGD'])
     useEffect(()=>{
 
-      axios.get(`https://api.exchangeratesapi.io/history?start_at=2015-03-26&end_at=2017-06-13&base=SEK`)
-			.then(data => {
-      
-        console.log('chart data')
-				console.log(data);
+      // get rates for SEK regarding currencies for graph for given period
+      axios.get(
+          `https://api.exchangeratesapi.io/history?start_at=2015-03-26&end_at=2017-06-13&base=SEK&symbols=${currenciesForGraph.join(',')}`
+        )
+        .then((data) => {
+         
+          setOptions({
+            title: {
+              text: "SEK stock chart",
+            },
+            // creating 3 sets of data, one for each currency for graph
+            series: currenciesForGraph.map(
+              (cur) => cur = {
+                  name: cur,
+                  data: Object.entries(data.data.rates)
+                    .map((one) => [new Date(one[0]).getTime(), one[1][cur]]) // array [ data , value ]
+                    .sort((a, b) => (a[0] > b[0] ? 1 : -1)), // sort to have correct dates order
+                }
+            ),
+          });
+        })
+        .catch((err) => console.log(`error while loading chart data - ${err}`));
 
-			})
-			.catch(err => console.log(`error while loading chart data - ${err}`))
+  },[])
 
-    },[])
-
-    return (
-        <div className='Trends'>
-          <HighchartsReact
-            highcharts={Highcharts}
-            constructorType={'stockChart'}
-            options={chartOptions}
-          />
-        </div>
-    )
+  return (
+    <div className="Trends">
+      <HighchartsReact
+        highcharts={Highcharts}
+        constructorType={"stockChart"}
+        options={options}
+      />
+    </div>
+  );
 }

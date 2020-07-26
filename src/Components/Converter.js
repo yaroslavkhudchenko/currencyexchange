@@ -19,9 +19,9 @@ export const Converter = () => {
 		// latest based on SEK
 		axios.get(`https://api.exchangeratesapi.io/latest?base=${selected.base.cur}`)
 			.then(data => {
-				console.log('data load success ', 
-					Object.entries(data.data.rates).map(one => one = { cur:one[0], value:one[1]}));
-				console.log(data);
+				// console.log('data load success ', 
+					//Object.entries(data.data.rates).map(one => one = { cur:one[0], value:one[1]}));
+				// console.log(data);
 				
 				let correctData = Object.entries(data.data.rates).map(one => one = { cur:one[0], value:one[1]});
 
@@ -60,7 +60,7 @@ export const Converter = () => {
             ) :
 				axios.get(`https://api.exchangeratesapi.io/latest?base=${e.target.value}`)
 					.then((data) => {
-						console.log('good refresh currencies');
+						//console.log('good refresh currencies');
 						let correctData = Object.entries(data.data.rates).map(one => one = { cur:one[0], value:one[1]})
 						setListOfCurrencies(correctData);
 
@@ -80,8 +80,8 @@ export const Converter = () => {
 	}
 
     const inputChange = (e, what) => {
-		console.log('input')
-		console.log(e.target.value)
+		//console.log('input')
+		//console.log(e.target.value)
 		
 		// check which of two inputs changed
 		what === 'target'? 
@@ -113,8 +113,8 @@ export const Converter = () => {
 		let target = selected.target;
 		axios.get(`https://api.exchangeratesapi.io/latest?base=${target.cur}`)
 			.then(data => {
-				console.log('data mix success');
-				console.log(data)
+				//console.log('data mix success');
+				//console.log(data)
 
 				let correctData = Object.entries(data.data.rates).map(one => one = { cur:one[0], value:one[1]})
 
@@ -134,13 +134,13 @@ export const Converter = () => {
 	}
 
     useEffect(()=>{
-        console.log('selectedTarget')
-        console.log(selected.target)
+        //console.log('selectedTarget')
+       // console.log(selected.target)
     },[selected])
 
     useEffect(()=>{
-        console.log('selectedBase')
-        console.log(selected.base)
+       // console.log('selectedBase')
+       // console.log(selected.base)
     },[selected])
 
     return (

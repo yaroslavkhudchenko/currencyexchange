@@ -137,7 +137,10 @@ export const Converter = () => {
 
 				})
 				setListOfCurrencies(correctData);
-
+				appContext.setState({
+					...appContext.state,
+					graphCurrency: data.data.base,
+				});
 			})
 		
 	}

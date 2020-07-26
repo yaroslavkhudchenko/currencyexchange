@@ -21,3 +21,27 @@ body {
     border-radius: 5px;
   }
 }
+
+@media (max-width: 1200px) {
+  body {
+    .App {
+      width: 60%;
+    }
+  }
+}
+
+@media (max-width: 630px) {
+
+  body {
+    .App {
+      position: relative;
+      top:unset;
+      left: unset;
+      transform: unset;
+      padding: 20px 10px;
+      margin: auto;
+      width: 95%;
+    }
+  }
+
+}

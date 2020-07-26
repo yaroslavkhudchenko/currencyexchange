@@ -22,6 +22,7 @@ export const Trends = () => {
         )
         .then((data) => {
           setOptions({
+             responsive: true,
             title: {
               text: `${appContext.state.graphCurrency} stock chart`,
             },

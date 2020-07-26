@@ -5,8 +5,8 @@ import axios from 'axios';
 export const Converter = () => {
 
     // selected base and target currencies for the selectors
-    let [selectedBase, setSelectedBase] = useState({cur:'SEK', val:1});
-    let [selectedTarget, setSelectedTarget] = useState({cur:'USD', val: 1});
+    let [selectedBase, setSelectedBase] = useState({cur:'SEK', value:12});
+    let [selectedTarget, setSelectedTarget] = useState({cur:'USD', value: 2.3223});
 
     // list of all available currencies for the selectors
     let [listOfCurrencies, setListOfCurrencies] = useState([]);
@@ -29,36 +29,64 @@ export const Converter = () => {
 
 
     const refreshCurrencies = (e, what) =>	{
-		
+        e.persist();
+        console.log((() => listOfCurrencies.filter(one=>one.cur === e.target.value)[0].value)());
+        console.log(e.target.value);
+
+
 		what === 'target' ?
-			setSelectedTarget(e.target.value) :
+			setSelectedTarget(
+                {
+                    cur:e.target.value, 
+                    value: (() => listOfCurrencies.filter(one=>one.cur === e.target.value)[0].value)()
+                }
+            ) :
 				axios.get(`https://api.exchangeratesapi.io/latest?base=${e.target.value}`)
 					.then((data) => {
 						console.log('good refresh currencies');
-						console.log(data.data.rates)
 						setListOfCurrencies(Object.entries(data.data.rates).map(one => one = { cur:one[0], value:one[1]}));
-						setSelectedBase(data.data.base)
+						setSelectedBase({cur:data.data.base, value:1})
+                        console.log(e.target.value);
+                        console.log(data.data.base)
 
 					})
 					.catch(err => console.log(`error during refreshing - ${err}`))
 	}
 
+    const inputChange = (e) => {
+		console.log('input')
+		setSelectedTarget({
+			cur:e.target.value, 
+			value: (() => listOfCurrencies.filter(one=>one.cur === e.target.value)[0].value)()
+		})
+    }
+
+
+    useEffect(()=>{
+        console.log('selectedTarget')
+        console.log(selectedTarget)
+    },[selectedTarget])
+
+    useEffect(()=>{
+        console.log('selectedBase')
+        console.log(selectedBase)
+    },[selectedBase])
 
     return (
         <div className='Converter'>
             <div className='selectCurrency'>
                 <div className='singleCurrency'>
 					<div className='selector'>
-						<select value={selectedBase} onChange={(e)=> refreshCurrencies(e, 'base')}>
-                        {listOfCurrencies.map((one,index)=>
+						<select value={selectedBase.cur} onChange={(e)=> refreshCurrencies(e, 'base')}>
+                            {listOfCurrencies.map((one,index)=>
 
-                            <option defaultValue={one.cur} key={one.value+index}>{one.cur}</option>
+                                <option value={one.cur} key={index}>{one.cur}</option>
 
-                        )}
+                            )}
 						</select>
 					</div>
 					<div className='valueInput'>
-						<input defaultValue={1} />
+						<input type='number' readOnly value={selectedBase.value} />
 					</div>
 				</div>
                 <div className='mixArrows'>
@@ -66,21 +94,26 @@ export const Converter = () => {
 				</div>
 				<div className='singleCurrency'>
 					<div className='selector'>
-						<select value={selectedTarget} onChange={(e)=> refreshCurrencies(e, 'target')}>
-						{listOfCurrencies.map((one,index)=>
+						<select value={selectedTarget.cur} onChange={(e)=> refreshCurrencies(e, 'target')}>
+                            {listOfCurrencies.map((one,index)=>
 
-                            <option defaultValue={one.cur} key={one.value+index}>{one.cur}</option>
+                                <option value={one.cur} key={index}>{one.cur}</option>
 
-                        )}
+                            )}
 						</select>
 					</div>
 					<div className='valueInput'>
-						<input defaultValue={1} />
+						<input type='number' readOnly value={(selectedTarget.value *selectedBase.value).toFixed(5)} />
 					</div>
 				</div>
             </div>
             <div className='result'>
-
+				<div className='resultTitle'>
+					{selectedBase.cur} / {selectedTarget.cur}
+				</div>
+				<div className='resultBody'>
+					<div>Selling 1.00000 {selectedBase.cur} gives you {selectedTarget.value} {selectedTarget.cur}</div>
+				</div>
             </div>
 
         </div>

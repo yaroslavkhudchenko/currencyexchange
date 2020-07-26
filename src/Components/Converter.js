@@ -19,9 +19,9 @@ export const Converter = () => {
 		// latest based on SEK
 		axios.get(`https://api.exchangeratesapi.io/latest?base=${selected.base.cur}`)
 			.then(data => {
-				// console.log('data load success ', 
-					//Object.entries(data.data.rates).map(one => one = { cur:one[0], value:one[1]}));
-				// console.log(data);
+				console.log('data load success ', 
+					Object.entries(data.data.rates).map(one => one = { cur:one[0], value:one[1]}));
+				console.log(data);
 				
 				let correctData = Object.entries(data.data.rates).map(one => one = { cur:one[0], value:one[1]});
 
@@ -46,75 +46,78 @@ export const Converter = () => {
 
     const refreshCurrencies = (e, what) =>	{
         e.persist();
+		let data = listOfCurrencies.filter(one=>one.cur === e.target.value)[0].value;
+		what === "target"
+			? 
+				setSelected({
+          			...selected,
+          			target: {
+						cur: e.target.value,
+						value: data,
+						pointer: data,
+					},
+				})
+			  : 
+			  axios.get(`https://api.exchangeratesapi.io/latest?base=${e.target.value}`)
+          		.then((data) => {
+            console.log("good refresh currencies");
+            let correctData = Object.entries(data.data.rates).map(
+              (one) => (one = { cur: one[0], value: one[1] })
+            );
+            setListOfCurrencies(correctData);
 
-		what === 'target' ?
-			setSelected(
-                {
-					...selected,
-					target : {
-						cur:e.target.value, 
-						value: listOfCurrencies.filter(one=>one.cur === e.target.value)[0].value
-					}
-                    
-                }
-            ) :
-				axios.get(`https://api.exchangeratesapi.io/latest?base=${e.target.value}`)
-					.then((data) => {
-						//console.log('good refresh currencies');
-						let correctData = Object.entries(data.data.rates).map(one => one = { cur:one[0], value:one[1]})
-						setListOfCurrencies(correctData);
-
-
-						setSelected({
-							base: {cur:data.data.base, value:1},
-							target: {
-								...selected.target,
-								value:correctData.filter(one=>one.cur === selected.target.cur)[0].value,
-								pointer: correctData.filter(one=>one.cur === selected.target.cur)[0].value
-							}
-						})
-
-					
-					})
-					.catch(err => console.log(`error during refreshing - ${err}`))
+            setSelected({
+              base: { cur: data.data.base, value: 1 },
+              target: {
+                ...selected.target,
+                value: correctData.filter(
+                  (one) => one.cur === selected.target.cur
+                )[0].value,
+                pointer: correctData.filter(
+                  (one) => one.cur === selected.target.cur
+                )[0].value,
+              },
+            });
+          })
+          .catch((err) => console.log(`error during refreshing - ${err}`));
 	}
 
     const inputChange = (e, what) => {
-		//console.log('input')
-		//console.log(e.target.value)
+		console.log('input')
+		console.log(e.target.value)
 		
 		// check which of two inputs changed
-		what === 'target'? 
-
-			setSelected({
-				base : {
-					...selected.base,
-					// value is based on target value(from editing input) divided by the pointer of the target currency
-					value : e.target.value / selected.target.pointer
-				},
-				target : {...selected.target, value:e.target.value }
-			})
-			
-		:
-			setSelected({
-				base : {
-					...selected.base,
-					value: e.target.value
-				},
-				target: {
-					...selected.target,
-					// value is based on target value(from editing input) multiply by number of base value
-					value: e.target.value * selected.target.pointer
-				}
-			})
+		what === "target"
+      ? setSelected({
+          base: {
+            ...selected.base,
+            // value is based on target value(from editing input) divided by the pointer of the target currency
+            value: e.target.value / selected.target.pointer,
+          },
+          target: {
+            ...selected.target,
+            value: e.target.value
+          },
+        })
+      : setSelected({
+          base: {
+            ...selected.base,
+            value: e.target.value,
+          },
+          target: {
+            ...selected.target,
+            // value is based on target value(from editing input) multiply by number of base value
+            value: e.target.value * selected.target.pointer,
+          },
+        });
     }
 	const mixCurrencies = () => {
 		let base = selected.base;
 		let target = selected.target;
 		axios.get(`https://api.exchangeratesapi.io/latest?base=${target.cur}`)
 			.then(data => {
-				//console.log('data mix success');
-				//console.log(data)
+				console.log('data mix success');
+				console.log(data)
 
 				let correctData = Object.entries(data.data.rates).map(one => one = { cur:one[0], value:one[1]})
 
@@ -134,13 +137,13 @@ export const Converter = () => {
 	}
 
     useEffect(()=>{
-        //console.log('selectedTarget')
-       // console.log(selected.target)
+        console.log('selectedTarget')
+        console.log(selected.target)
     },[selected])
 
     useEffect(()=>{
-       // console.log('selectedBase')
-       // console.log(selected.base)
+        console.log('selectedBase')
+        console.log(selected.base)
     },[selected])
 
     return (

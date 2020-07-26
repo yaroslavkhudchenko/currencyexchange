@@ -4,7 +4,6 @@ import { Converter } from './Converter';
 import { Trends } from './Trends';
 
 export const AppContext = createContext()
-
 export const App = () => {
 
 

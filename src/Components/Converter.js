@@ -2,10 +2,11 @@ import React, { useState, useEffect, useContext } from "react";
 import './../Styles/Converter.scss';
 import axios from 'axios';
 import { AppContext } from "./App";
+export const localStorage = window.localStorage;
 
 export const Converter = () => {
   	const appContext = useContext(AppContext);
-
+let localStorageData = null;
     // selected base and target currencies for the selectors
 	const [selected, setSelected] = useState({
 		base : {cur:'SEK', value:1},
@@ -18,8 +19,11 @@ export const Converter = () => {
     // get the initial data for the selectors 
 	useEffect(()=>{
 
+		localStorageData =  JSON.parse(localStorage.getItem("selected"));
+		console.log(localStorageData)
+
 		// latest based on SEK
-		axios.get(`https://api.exchangeratesapi.io/latest?base=${selected.base.cur}`)
+		axios.get(`https://api.exchangeratesapi.io/latest?base=${localStorageData ? localStorageData.base.cur : selected.base.cur}`)
 			.then(data => {
 				console.log('data load success ', 
 					Object.entries(data.data.rates).map(one => one = { cur:one[0], value:one[1]}));
@@ -30,17 +34,33 @@ export const Converter = () => {
 				// set selectable countries to the loaded rates data
 				setListOfCurrencies(correctData);
 
-				// set value based on loaded rates data
+				// set value based on loaded rates data or localstorage
+				if(localStorageData) {
+					setSelected({
+						base: {
+							cur : localStorageData.base.cur,
+							value:  localStorageData.base.value //correctData.filter(one=> one.cur === localStorageData.base.cur)[0].value
+						},
+						target : {
+							cur: localStorageData.target.cur,
+							value:  correctData.filter(one=> one.cur === localStorageData.target.cur)[0].value,
+							pointer: correctData.filter(one=> one.cur === localStorageData.target.cur)[0].value
+						}
+					})
+				} else {
+					setSelected({
+						...selected,
+						target : {
+							cur: 'GBP', 
+							value:  correctData.filter(one=> one.cur === selected.target.cur)[0].value,
+							pointer: correctData.filter(one=> one.cur === selected.target.cur)[0].value
+						},
+					})
+				}
 
-				setSelected({
-					...selected,
-					target : {
-						cur:'GBP', 
-						value:  correctData.filter(one=>one.cur === selected.target.cur)[0].value,
-						pointer: correctData.filter(one=>one.cur === selected.target.cur)[0].value
-					}
-				})
 
+				
+				
 			})
 			.catch(err => console.log(`error while loading data - ${err}`))
 
@@ -69,7 +89,7 @@ export const Converter = () => {
             setListOfCurrencies(correctData);
 
             setSelected({
-              base: { cur: data.data.base, value: 1 },
+              base: { cur: data.data.base, value: localStorageData ? localStorageData.base.value : 1 },
               target: {
                 ...selected.target,
                 value: correctData.filter(
@@ -79,7 +99,7 @@ export const Converter = () => {
                   (one) => one.cur === selected.target.cur
                 )[0].value,
               },
-			});
+            });
 			appContext.setState({
 				...appContext.state,
 				graphCurrency: data.data.base,
@@ -102,13 +122,13 @@ export const Converter = () => {
           },
           target: {
             ...selected.target,
-            value: e.target.value
+            value: e.target.value*1
           },
         })
       : setSelected({
           base: {
             ...selected.base,
-            value: e.target.value,
+            value: e.target.value*1,
           },
           target: {
             ...selected.target,
@@ -145,14 +165,10 @@ export const Converter = () => {
 		
 	}
 
-    useEffect(()=>{
-        console.log('selectedTarget')
-        console.log(selected.target)
-    },[selected])
-
-    useEffect(()=>{
-        console.log('selectedBase')
-        console.log(selected.base)
+    useEffect(() => {
+		console.log('changed')
+		console.log(selected.base)
+		localStorage.setItem("selected", JSON.stringify(selected))
     },[selected])
 
     return (

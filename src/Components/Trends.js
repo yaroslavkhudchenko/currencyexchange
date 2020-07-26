@@ -4,6 +4,8 @@ import Highcharts from 'highcharts/highstock'
 import HighchartsReact from 'highcharts-react-official'
 import axios from 'axios';
 import { AppContext } from './App';
+
+
 export const Trends = () => {
 
 
@@ -16,7 +18,7 @@ export const Trends = () => {
       // get rates for SEK regarding currencies for graph for given period
       axios
         .get(
-          `https://api.exchangeratesapi.io/history?start_at=2015-03-26&end_at=2017-06-13&base=${
+          `https://api.exchangeratesapi.io/history?start_at=2015-01-01&end_at=${new Date().toISOString().split('T')[0]}&base=${
             appContext.state.graphCurrency
           }&symbols=${currenciesForGraph.join(",")}`
         )
@@ -37,6 +39,7 @@ export const Trends = () => {
                 })
             ),
           });
+
         })
         .catch((err) => console.log(`error while loading chart data - ${err}`));
 
@@ -44,11 +47,13 @@ export const Trends = () => {
 
   return (
     <div className="Trends">
-      <HighchartsReact
-        highcharts={Highcharts}
-        constructorType={"stockChart"}
-        options={options}
-      />
+      
+        <HighchartsReact
+          highcharts={Highcharts}
+          constructorType={"stockChart"}
+          options={options}
+        />
+     
     </div>
   );
 }

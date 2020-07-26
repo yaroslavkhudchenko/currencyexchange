@@ -42,7 +42,7 @@ npm test
 ```
 npm run build
 ```
-and find the build version in ./dist folder
+and find the build version in ./build folder
 
 
 ## TO DO:

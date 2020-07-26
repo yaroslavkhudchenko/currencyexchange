@@ -21,10 +21,13 @@ export const Converter = () => {
 					Object.entries(data.data.rates).map(one => one = { cur:one[0], value:one[1]}));
 				console.log(data);
 
+				
 				let correctData = Object.entries(data.data.rates).map(one => one = { cur:one[0], value:one[1]});
+
 				// set selectable countries to the loaded rates data
 				setListOfCurrencies(correctData);
 
+				// set value based on loaded rates data
 				setSelectedTarget({
 					cur:'GBP', 
 					value:  correctData.filter(one=>one.cur === selectedTarget.cur)[0].value
@@ -47,15 +50,26 @@ export const Converter = () => {
 			setSelectedTarget(
                 {
                     cur:e.target.value, 
-                    value: (() => listOfCurrencies.filter(one=>one.cur === e.target.value)[0].value)()
+                    value: listOfCurrencies.filter(one=>one.cur === e.target.value)[0].value
                 }
             ) :
 				axios.get(`https://api.exchangeratesapi.io/latest?base=${e.target.value}`)
 					.then((data) => {
 						console.log('good refresh currencies');
-						setListOfCurrencies(Object.entries(data.data.rates).map(one => one = { cur:one[0], value:one[1]}));
+						let correctData = Object.entries(data.data.rates).map(one => one = { cur:one[0], value:one[1]})
+						setListOfCurrencies(correctData);
 						setSelectedBase({cur:data.data.base, value:1})
-						setSelectedBase({cur:data.data.base, value:1})
+
+
+						console.log('----------------------')
+						console.log(correctData.filter(one=>one.cur === selectedTarget.cur)[0])
+						console.log(correctData.filter(one=>one.cur === selectedTarget.cur)[0].value)
+
+
+						setSelectedTarget({
+							...selectedTarget,
+							value:correctData.filter(one=>one.cur === selectedTarget.cur)[0].value
+						})
                         console.log(e.target.value);
                         console.log(data.data.base)
 

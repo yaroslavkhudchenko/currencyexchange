@@ -11,7 +11,7 @@ export const Converter = () => {
 
 	let [selected, setSelected] = useState({
 		base : {cur:'SEK', value:1},
-		target : {cur: 'GBP', value:0}
+		target : {cur: 'GBP', value:0, pointer:0}
 	})
 
     // list of all available currencies for the selectors
@@ -38,7 +38,8 @@ export const Converter = () => {
 					...selected,
 					target : {
 						cur:'GBP', 
-						value:  correctData.filter(one=>one.cur === selected.target.cur)[0].value
+						value:  correctData.filter(one=>one.cur === selected.target.cur)[0].value,
+						pointer: correctData.filter(one=>one.cur === selected.target.cur)[0].value
 					}
 				})
 
@@ -46,6 +47,7 @@ export const Converter = () => {
 			.catch(err => console.log(`error while loading data - ${err}`))
 
 	},[]);
+
 
 
     const refreshCurrencies = (e, what) =>	{
@@ -73,7 +75,8 @@ export const Converter = () => {
 							base: {cur:data.data.base, value:1},
 							target: {
 								...selected.target,
-								value:correctData.filter(one=>one.cur === selected.target.cur)[0].value
+								value:correctData.filter(one=>one.cur === selected.target.cur)[0].value,
+								pointer: correctData.filter(one=>one.cur === selected.target.cur)[0].value
 							}
 						})
 
@@ -86,17 +89,21 @@ export const Converter = () => {
 		console.log('input')
 		console.log(e.target.value)
 		
-		if(what === 'target') {
+
+		
+		// check which of two inputs changed
+		what === 'target'? 
 
 			setSelected({
 				base : {
 					...selected.base,
-					value : ((e.target.value / selected.target.value)*1).toFixed(5)
+					// value is based on target value(from editing input) divided by the pointer of the target currency
+					value : e.target.value / selected.target.pointer
 				},
-				target : {...selected.target, value:e.target.value}
+				target : {...selected.target, value:e.target.value }
 			})
 			
-		} else {
+		:
 			setSelected({
 				base : {
 					...selected.base,
@@ -104,13 +111,10 @@ export const Converter = () => {
 				},
 				target: {
 					...selected.target,
-					value: {...selected.target, value:e.target.value * selected.target.value}
+					// value is based on target value(from editing input) multiply by number of base value
+					value: e.target.value * selected.target.pointer
 				}
 			})
-
-		}
-
-
 		
     }
 
@@ -141,10 +145,9 @@ export const Converter = () => {
 					<div className='valueInput'>
 						<input 
 							type='number' 
-							//onChange={e => setSelectedBase({...selectedBase, value:e.target.value}) } 
 							onChange={(e) => inputChange(e, 'base')}
 							min="0"
-							value={selected.base.value} 
+							value={(selected.base.value*1).toFixed(5)} 
 						/>
 					</div>
 				</div>
@@ -166,8 +169,7 @@ export const Converter = () => {
 							type='number' 
 							onChange={(e) => inputChange(e, 'target')}
 							min="0"
-							//value={(selectedTarget.value *selectedBase.value).toFixed(5)} 
-							value={selected.target.value}
+							value={(selected.target.value*1).toFixed(5)}
 						/>
 					</div>
 				</div>
@@ -177,7 +179,9 @@ export const Converter = () => {
 					{selected.base.cur} / {selected.target.cur}
 				</div>
 				<div className='resultBody'>
-					<div>Selling 1.00000 {selected.base.cur} gives you {(selected.target.value*1).toFixed(5)} {selected.target.cur}</div>
+					<div>Selling 1.00000 {selected.base.cur} gives you {((1 * selected.target.pointer)*1).toFixed(5)} {selected.target.cur}</div>
+					<div>Buying 1.00000 {selected.target.cur} costs you {((1 / selected.target.pointer)*1).toFixed(5)} {selected.base.cur}</div>
+
 				</div>
             </div>
 

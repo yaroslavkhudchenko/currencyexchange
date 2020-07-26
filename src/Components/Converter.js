@@ -1,17 +1,19 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect, useContext } from "react";
 import './../Styles/Converter.scss';
 import axios from 'axios';
+import { AppContext } from "./App";
 
 export const Converter = () => {
+  	const appContext = useContext(AppContext);
 
     // selected base and target currencies for the selectors
-	let [selected, setSelected] = useState({
+	const [selected, setSelected] = useState({
 		base : {cur:'SEK', value:1},
 		target : {cur: 'GBP', value:0, pointer:0}
 	})
 
     // list of all available currencies for the selectors
-    let [listOfCurrencies, setListOfCurrencies] = useState([]);
+    const [listOfCurrencies, setListOfCurrencies] = useState([]);
 
     // get the initial data for the selectors 
 	useEffect(()=>{
@@ -77,7 +79,11 @@ export const Converter = () => {
                   (one) => one.cur === selected.target.cur
                 )[0].value,
               },
-            });
+			});
+			appContext.setState({
+				...appContext.state,
+				graphCurrency: data.data.base,
+			});
           })
           .catch((err) => console.log(`error during refreshing - ${err}`));
 	}

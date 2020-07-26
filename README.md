@@ -6,9 +6,9 @@
     <li>User can change base/target currencies</li>
     <li>User can change base/target currencies values</li>
     <li>User can swap currencies by pressing mix</li>
-    <li>User can use graph to check currency value changes regards to USD,GBP and SGD starting from 2014-12-29</li>
+    <li>User can use graph to check currency value changes regarding USD,GBP and SGD starting from 2014-12-29</li>
     <li>User can use graph to check currency value changes sorted by 1,3,6 months, 1 year, all time and from the beginning of the current year</li>
-    <li>User can check price of bying and selling 1 peace of base/target currencies in the result box below inputs</li>
+    <li>User can check the price of buying and selling 1 peace of base/target currency</li>
 </ul>
 
 ## Tech Stack
@@ -26,7 +26,7 @@ Data is taken from http://exchangeratesapi.io/
 
 ## How to run
 
-1.clone the repository and go to folder: 
+1.clone the repository and go to the folder: 
 ```
 git clone https://github.com/yaroslavkhudchenko/currencyexchange.git && cd currencyexchange
 ```

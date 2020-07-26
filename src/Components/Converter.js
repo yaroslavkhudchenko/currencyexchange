@@ -147,60 +147,69 @@ export const Converter = () => {
     },[selected])
 
     return (
-        <div className='Converter'>
-            <div className='selectCurrency'>
-                <div className='singleCurrency'>
-					<div className='selector'>
-						<select value={selected.base.cur} onChange={(e)=> refreshCurrencies(e, 'base')}>
-                            {listOfCurrencies.map((one,index)=>
-
-                                <option value={one.cur} key={index}>{one.cur}</option>
-
-                            )}
-						</select>
-					</div>
-					<div className='valueInput'>
-						<input 
-							type='number' 
-							onChange={(e) => inputChange(e, 'base')}
-							min="0"
-							value={selected.base.value*1} 
-						/>
-					</div>
-				</div>
-                <div className='mixArrows' onClick={mixCurrencies}>
-					mix
-				</div>
-				<div className='singleCurrency'>
-					<div className='selector'>
-						<select value={selected.target.cur} onChange={(e)=> refreshCurrencies(e, 'target')}>
-                            {listOfCurrencies.map((one,index)=>
-
-                                <option value={one.cur} key={index}>{one.cur}</option>
-
-                            )}
-						</select>
-					</div>
-					<div className='valueInput'>
-						<input 
-							type='number' 
-							onChange={(e) => inputChange(e, 'target')}
-							min="0"
-							value={selected.target.value}
-						/>
-					</div>
-				</div>
+      <div className="Converter">
+        <div className="selectCurrency">
+          <div className="singleCurrency">
+            <div className="selector">
+              <select
+                value={selected.base.cur}
+                onChange={(e) => refreshCurrencies(e, "base")}
+              >
+                {listOfCurrencies.map((one) => (
+                  <option value={one.cur} key={one.value}>
+                    {one.cur}
+                  </option>
+                ))}
+              </select>
             </div>
-            <div className='result'>
-				<div className='resultTitle'>
-					{selected.base.cur} / {selected.target.cur}
-				</div>
-				<div className='resultBody'>
-					<div>Selling 1.00000 {selected.base.cur} gives you {((1 * selected.target.pointer)*1).toFixed(5)} {selected.target.cur}</div>
-					<div>Buying 1.00000 {selected.target.cur} costs you {((1 / selected.target.pointer)*1).toFixed(5)} {selected.base.cur}</div>
-				</div>
+            <div className="valueInput">
+              <input
+                type="number"
+                onChange={(e) => inputChange(e, "base")}
+                min="0"
+                value={selected.base.value * 1}
+              />
             </div>
-
+          </div>
+          <div className="mixArrows" onClick={mixCurrencies}>
+            mix
+          </div>
+          <div className="singleCurrency">
+            <div className="selector">
+              <select
+                value={selected.target.cur}
+                onChange={(e) => refreshCurrencies(e, "target")}
+              >
+                {listOfCurrencies.map((one) => (
+                  <option value={one.cur} key={one.value}>
+                    {one.cur}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="valueInput">
+              <input
+                type="number"
+                onChange={(e) => inputChange(e, "target")}
+                min="0"
+                value={selected.target.value}
+              />
+            </div>
+          </div>
         </div>
-    )
+        <div className="result">
+          <div className="resultTitle">
+            {selected.base.cur} / {selected.target.cur}
+          </div>
+          <div className="resultBody">
+            <div>
+              Selling 1.00000 {selected.base.cur} gives you {(1 * selected.target.pointer * 1).toFixed(5)} {selected.target.cur}
+            </div>
+            <div>
+              Buying 1.00000 {selected.target.cur} costs you {((1 / selected.target.pointer) * 1).toFixed(5)} {selected.base.cur}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
 }

@@ -1,10 +1,11 @@
 @import './App.scss';
+
 // common style for input and select
 @mixin selectInput{
     padding: 5px;
     border: none;
     font-size: $fontSize;
-    background: #F3DFC1;
+    background: $mainFontColor;
     width: 250px;
     box-sizing: border-box;
     &:focus {
@@ -18,7 +19,7 @@
     align-items: center;
     flex-direction: column;
     width:  fit-content;
-    height: 180px;
+    height: 200px;
     justify-content: space-between;
     width: 100%;
     .selectCurrency {
@@ -46,22 +47,31 @@
                 /* Chrome, Safari, Edge, Opera */
                 input::-webkit-outer-spin-button,
                 input::-webkit-inner-spin-button {
-                -webkit-appearance: none;
-                margin: 0;
+                    -webkit-appearance: none;
+                    margin: 0;
                 }
 
                 /* Firefox */
                 input[type=number] {
-                -moz-appearance: textfield;
+                    -moz-appearance: textfield;
                 }
             }
         }
         .mixArrows {
-            color: #F3DFC1;
+            color: $mainFontColor;
             font-size: 20px;
         }
      }
      .result {
         font-size: $fontSize;
+        color: $mainFontColor;
+        height: 200px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        .resultTitle {
+            text-align: center;
+            font-size: 30px;
+        }
      }
 }

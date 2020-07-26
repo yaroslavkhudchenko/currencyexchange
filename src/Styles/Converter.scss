@@ -1,8 +1,10 @@
+@import './App.scss';
 // common style for input and select
 @mixin selectInput{
     padding: 5px;
     border: none;
-    font-size: 20px;
+    font-size: $fontSize;
+    background: #F3DFC1;
     width: 250px;
     box-sizing: border-box;
     &:focus {
@@ -15,10 +17,15 @@
     display: flex;
     align-items: center;
     flex-direction: column;
-    background:lightcoral;
-    width: 400px;
+    width:  fit-content;
+    height: 180px;
+    justify-content: space-between;
+    width: 100%;
     .selectCurrency {
         display: flex;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
         .singleCurrency {
             display: flex;
             flex-direction: column;
@@ -49,5 +56,12 @@
                 }
             }
         }
+        .mixArrows {
+            color: #F3DFC1;
+            font-size: 20px;
+        }
+     }
+     .result {
+        font-size: $fontSize;
      }
 }

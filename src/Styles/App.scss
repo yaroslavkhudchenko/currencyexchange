@@ -1,15 +1,21 @@
+$fontSize : 20px;
+$primaryColor: #160F29;
+$secondaryColor: #246A73;
+
+
+
 body {
   margin: 0;
-  background:cyan;
+  background:$primaryColor;
   .App {
-   display: flex;
+    display: flex;
     flex-direction: column;
     align-items: center;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     position: absolute;
-    background: green;
+    // background: $secondaryColor;
     padding: 20px;
     border-radius: 5px;
   }

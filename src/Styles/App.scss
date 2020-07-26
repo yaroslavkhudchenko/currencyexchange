@@ -1,9 +1,6 @@
 $fontSize : 20px;
 $mainFontColor: #F3DFC1;
 $primaryColor: #160F29;
-$secondaryColor: #246A73;
-
-
 
 body {
   margin: 0;
@@ -16,7 +13,6 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     position: absolute;
-    // background: $secondaryColor;
     padding: 20px;
     border-radius: 5px;
   }

@@ -37,7 +37,6 @@
                 select {
                     @include selectInput;
                 }
-                
             }
             .valueInput {
                 input {
@@ -80,35 +79,24 @@
 
 @media (max-width: 920px) {
 
-.Converter {
-    height: unset;
-    .selectCurrency {
-        height: 200px;
-        flex-direction: column;
-        width: 100%;
-        .singleCurrency {
-           
-            .selector {
-                select {
-                    @include selectInput;
+    .Converter {
+        height: unset;
+        .selectCurrency {
+            height: 200px;
+            flex-direction: column;
+            width: 100%;
+            .singleCurrency {
+                .selector {
+                    select {
+                        @include selectInput;
+                    }
                 }
-                
-            }
-            .valueInput {
-               
             }
         }
-        .mixArrows {
-            
+        .result {
+            height: 140px;
+            font-size:17px;
         }
-     }
-     .result {
-        height: 140px;
-        font-size:17px;
-        .resultTitle {
-        }
-        
-     }
-}
+    }
 
 }

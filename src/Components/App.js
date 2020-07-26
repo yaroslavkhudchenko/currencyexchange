@@ -6,7 +6,6 @@ import { Trends } from './Trends';
 export const AppContext = createContext()
 export const App = () => {
 
-
   const [appState, setAppState] = useState({
     graphCurrency: 'SEK'
   })

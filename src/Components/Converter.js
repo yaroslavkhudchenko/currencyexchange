@@ -99,7 +99,9 @@ let localStorageData = null;
                   (one) => one.cur === selected.target.cur
                 )[0].value,
               },
-            });
+			});
+							console.log("-------------------");
+
 			appContext.setState({
 				...appContext.state,
 				graphCurrency: data.data.base,
@@ -157,6 +159,7 @@ let localStorageData = null;
 
 				})
 				setListOfCurrencies(correctData);
+
 				appContext.setState({
 					...appContext.state,
 					graphCurrency: data.data.base,
@@ -170,7 +173,11 @@ let localStorageData = null;
 		console.log(selected.base)
 		localStorage.setItem("selected", JSON.stringify(selected))
     },[selected])
-
+    useEffect(() => {
+		console.log('changed')
+		console.log(appContext.graphCurrency)
+		appContext.graphCurrency && localStorage.setItem("graphCurrency", appContext.graphCurrency);
+	}, [appContext.graphCurrency]);
     return (
       <div className="Converter">
         <div className="selectCurrency">

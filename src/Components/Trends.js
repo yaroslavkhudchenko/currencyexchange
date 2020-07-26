@@ -5,6 +5,7 @@ import HighchartsReact from 'highcharts-react-official'
 import axios from 'axios';
 import { AppContext } from './App';
 
+let localStorage = window.localStorage;
 
 export const Trends = () => {
 
@@ -14,12 +15,14 @@ export const Trends = () => {
 
   const [currenciesForGraph, setCurrenciesForGraph] = useState(['GBP','USD','SGD'])
     useEffect(()=>{
-
+      let localStorageValue = localStorage.getItem("graphCurrency");
+      console.log('trends')
+      console.log(localStorageValue)
       // get rates for SEK regarding currencies for graph for given period
       axios
         .get(
           `https://api.exchangeratesapi.io/history?start_at=2015-01-01&end_at=${new Date().toISOString().split('T')[0]}&base=${
-            appContext.state.graphCurrency
+            localStorageValue ? localStorageValue.graphCurrency : appContext.state.graphCurrency
           }&symbols=${currenciesForGraph.join(",")}`
         )
         .then((data) => {

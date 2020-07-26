@@ -5,8 +5,8 @@ import axios from 'axios';
 export const Converter = () => {
 
     // selected base and target currencies for the selectors
-    let [selectedBase, setSelectedBase] = useState({cur:'SEK', value:12});
-    let [selectedTarget, setSelectedTarget] = useState({cur:'USD', value: 2.3223});
+    let [selectedBase, setSelectedBase] = useState({cur:'SEK', value:1});
+    let [selectedTarget, setSelectedTarget] = useState({cur: 'GBP', value:0});
 
     // list of all available currencies for the selectors
     let [listOfCurrencies, setListOfCurrencies] = useState([]);
@@ -19,9 +19,18 @@ export const Converter = () => {
 			.then(data => {
 				console.log('data load success ', 
 					Object.entries(data.data.rates).map(one => one = { cur:one[0], value:one[1]}));
-				console.log(data)
+				console.log(data);
+
+				let correctData = Object.entries(data.data.rates).map(one => one = { cur:one[0], value:one[1]});
 				// set selectable countries to the loaded rates data
-				setListOfCurrencies(Object.entries(data.data.rates).map(one => one = { cur:one[0], value:one[1]}));
+				setListOfCurrencies(correctData);
+
+				setSelectedTarget({
+					cur:'GBP', 
+					value:  correctData.filter(one=>one.cur === selectedTarget.cur)[0].value
+				})
+
+
 			})
 			.catch(err => console.log(`error while loading data - ${err}`))
 
@@ -45,6 +54,7 @@ export const Converter = () => {
 					.then((data) => {
 						console.log('good refresh currencies');
 						setListOfCurrencies(Object.entries(data.data.rates).map(one => one = { cur:one[0], value:one[1]}));
+						setSelectedBase({cur:data.data.base, value:1})
 						setSelectedBase({cur:data.data.base, value:1})
                         console.log(e.target.value);
                         console.log(data.data.base)
@@ -112,7 +122,7 @@ export const Converter = () => {
 					{selectedBase.cur} / {selectedTarget.cur}
 				</div>
 				<div className='resultBody'>
-					<div>Selling 1.00000 {selectedBase.cur} gives you {selectedTarget.value} {selectedTarget.cur}</div>
+					<div>Selling 1.00000 {selectedBase.cur} gives you {selectedTarget.value.toFixed(5)} {selectedTarget.cur}</div>
 				</div>
             </div>
 
